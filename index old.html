@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habiba Ehab — Curiosity in Action</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FAF6ED;
+    --ivory-deep:#F4EEE0;
+    --ink:#262220;
+    --ink-soft:#6B655D;
+    --burgundy:#7C2D3B;
+    --burgundy-soft:#A8505E;
+    --burgundy-wash:rgba(124,45,59,0.07);
+    --sage:#A8B2A1;
+    --sage-wash:rgba(168,178,161,0.16);
+    --line:#E1D7C6;
+    --line-strong:#CFC2AC;
+    --serif-display:'Playfair Display', serif;
+    --serif-body:'Source Serif 4', serif;
+    --sans:'Inter', sans-serif;
+    --mono:'IBM Plex Mono', monospace;
+    --script:'Caveat', cursive;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:var(--serif-body);
+    font-weight:400;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--burgundy); color:var(--ivory);}
+  a{color:inherit; text-decoration:none;}
+  .mono{font-family:var(--mono); letter-spacing:0.01em;}
+
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:1;
+    opacity:0.035; mix-blend-mode:multiply;
+  }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 5vw;
+    transition:padding .5s var(--ease), background .5s var(--ease), box-shadow .5s var(--ease);
+  }
+  .nav.scrolled{
+    padding:16px 5vw;
+    background:rgba(250,246,237,0.72);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    box-shadow:0 1px 0 rgba(38,34,32,0.06), 0 8px 24px rgba(38,34,32,0.04);
+  }
+  .nav-name{
+    font-family:var(--serif-display);
+    font-size:1.05rem; letter-spacing:0.01em; font-weight:600;
+  }
+  .nav-right{display:flex; align-items:center; gap:3.2vw;}
+  .nav-links{display:flex; gap:2.6vw; list-style:none;}
+  .nav-links a{
+    font-family:var(--sans); font-size:0.82rem; font-weight:500;
+    letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--ink-soft);
+    position:relative; padding-bottom:4px;
+    transition:color .3s var(--ease);
+  }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:100%; height:1px;
+    background:var(--burgundy); transform:scaleX(0); transform-origin:left;
+    transition:transform .4s var(--ease);
+  }
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a:hover::after{transform:scaleX(1);}
+  .nav-resume{
+    font-family:var(--sans); font-size:0.78rem; color:var(--ink-soft);
+    border-bottom:1px solid var(--line-strong); padding-bottom:2px;
+    transition:color .3s var(--ease), border-color .3s var(--ease);
+  }
+  .nav-resume:hover{color:var(--burgundy); border-color:var(--burgundy);}
+  .resume-dropdown{position:relative;}
+  .resume-menu{
+    position:absolute; top:calc(100% + 14px); right:0;
+    background:var(--ivory); border:1px solid var(--line);
+    box-shadow:0 12px 30px -12px rgba(38,34,32,0.22);
+    display:flex; flex-direction:column; min-width:190px;
+    opacity:0; visibility:hidden; transform:translateY(-6px);
+    transition:opacity .2s var(--ease), transform .2s var(--ease), visibility .2s;
+    z-index:50;
+  }
+  .resume-menu.open{opacity:1; visibility:visible; transform:translateY(0);}
+  .resume-menu a{
+    font-family:var(--sans); font-size:0.8rem; color:var(--ink-soft);
+    padding:12px 18px; border-bottom:1px solid var(--line);
+    transition:background .15s var(--ease), color .15s var(--ease);
+  }
+  .resume-menu a:last-child{border-bottom:none;}
+  .resume-menu a:hover{background:var(--ivory-deep); color:var(--burgundy);}
+
+  @media (max-width:900px){
+    .nav-links{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero-wrapper{position:relative; height:260vh;}
+  .hero-sticky{
+    position:sticky; top:0; height:100vh; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hero-bg-grid{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--ink) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+    background-size:64px 64px; opacity:0.03;
+  }
+  canvas#network{position:absolute; inset:0; width:100%; height:100%;}
+
+  .hero-layer{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:0 6vw;
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+
+  .layer-heading{opacity:1; transform:translateY(0);}
+  .layer-heading h1{
+    font-family:var(--serif-display); font-weight:500;
+    font-size:clamp(2.3rem, 5.6vw, 4.6rem);
+    letter-spacing:-0.01em; max-width:18ch;
+  }
+  .layer-heading p{
+    margin-top:26px; font-size:1.03rem; color:var(--ink-soft);
+    max-width:44ch; line-height:1.75;
+  }
+  .hero-cta{
+    margin-top:38px;
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--sans); font-size:0.82rem; font-weight:600;
+    letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--burgundy);
+    border-bottom:1px solid var(--burgundy); padding-bottom:5px;
+    transition:gap .3s var(--ease), color .3s var(--ease);
+  }
+  .hero-cta:hover{gap:16px;}
+
+  .scroll-indicator{
+    position:absolute; bottom:44px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    font-family:var(--sans); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--ink-soft);
+    animation:bob 2.6s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,8px);}}
+
+  [data-phase="1"] .layer-heading, [data-phase="2"] .layer-heading,
+  [data-phase="3"] .layer-heading, [data-phase="4"] .layer-heading,
+  [data-phase="5"] .layer-heading{opacity:0; transform:translateY(-40px); pointer-events:none;}
+  [data-phase="0"] .scroll-indicator{opacity:1;}
+  [data-phase="1"] .scroll-indicator, [data-phase="2"] .scroll-indicator,
+  [data-phase="3"] .scroll-indicator, [data-phase="4"] .scroll-indicator,
+  [data-phase="5"] .scroll-indicator{opacity:0;}
+
+  .layer-intro{
+    opacity:0; pointer-events:none;
+    display:grid; grid-template-columns:1fr 1fr; gap:6vw;
+    align-items:center; max-width:1180px; width:100%; text-align:left;
+  }
+  [data-phase="2"] .layer-intro, [data-phase="3"] .layer-intro,
+  [data-phase="4"] .layer-intro, [data-phase="5"] .layer-intro{opacity:1; pointer-events:auto;}
+
+  .intro-text .typed-line{
+    font-family:var(--serif-display); font-weight:500;
+    font-size:clamp(1.5rem, 2.8vw, 2.2rem); margin-bottom:20px;
+  }
+  .typed-line span{opacity:0; transition:opacity .05s linear;}
+  .typed-line span.show{opacity:1;}
+
+  .intro-text .intro-para{
+    font-size:1rem; color:var(--ink-soft); line-height:1.8; max-width:44ch;
+    opacity:0; transform:translateY(14px) blur(4px);
+    filter:blur(4px);
+    transition:opacity .35s var(--ease) .1s, transform .35s var(--ease) .1s, filter .35s var(--ease) .1s;
+  }
+  [data-phase="2"] .intro-text .intro-para, [data-phase="3"] .intro-text .intro-para,
+  [data-phase="4"] .intro-text .intro-para, [data-phase="5"] .intro-text .intro-para{
+    opacity:1; transform:translateY(0); filter:blur(0);
+  }
+
+  .intro-visual{
+    position:relative; display:flex; flex-direction:column; align-items:flex-start;
+    opacity:0; transform:translateY(20px) translateX(18px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  [data-phase="3"] .intro-visual, [data-phase="4"] .intro-visual, [data-phase="5"] .intro-visual{
+    opacity:1; transform:translateY(0) translateX(0);
+  }
+
+  .photo-frame{position:relative; width:230px; height:280px; margin-left:14%;}
+  .photo-blob{position:absolute; inset:-34px -26px -20px -34px; z-index:0;}
+  .photo-placeholder{
+    position:relative; z-index:1; width:100%; height:100%; border-radius:4px;
+    background:linear-gradient(160deg, #EFE7D6, #E6DCC6);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif-display); font-size:3rem; color:var(--burgundy);
+    box-shadow:0 24px 50px -20px rgba(38,34,32,0.28);
+    filter:blur(6px);
+    transition:filter .5s var(--ease);
+  }
+  [data-phase="3"] .photo-placeholder, [data-phase="4"] .photo-placeholder, [data-phase="5"] .photo-placeholder{
+    filter:blur(0);
+  }
+  .photo-signature{
+    font-family:var(--script); font-size:1.7rem; color:var(--burgundy);
+    margin-top:14px; margin-left:14%;
+  }
+  .photo-caption{
+    font-family:var(--mono); font-size:0.68rem; color:var(--ink-soft);
+    margin-top:6px; margin-left:14%; letter-spacing:0.02em; line-height:1.6;
+  }
+
+  .margin-note{
+    margin-top:30px; margin-left:14%;
+    border-left:2px solid var(--burgundy); padding-left:16px;
+  }
+  .margin-note .mn-label{
+    font-family:var(--sans); font-size:0.66rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:8px;
+  }
+  .margin-note ul{list-style:none;}
+  .margin-note li{
+    font-family:var(--serif-body); font-style:italic; font-size:0.88rem;
+    color:var(--ink); line-height:1.85;
+    opacity:0; transform:translateY(6px);
+    transition:opacity .5s var(--ease), transform .5s var(--ease);
+  }
+  [data-phase="4"] .margin-note li, [data-phase="5"] .margin-note li{opacity:1; transform:translateY(0);}
+  [data-phase="4"] .margin-note li:nth-child(1), [data-phase="5"] .margin-note li:nth-child(1){transition-delay:.02s;}
+  [data-phase="4"] .margin-note li:nth-child(2), [data-phase="5"] .margin-note li:nth-child(2){transition-delay:.06s;}
+  [data-phase="4"] .margin-note li:nth-child(3), [data-phase="5"] .margin-note li:nth-child(3){transition-delay:.1s;}
+
+  .hero-quote{
+    grid-column:1 / -1; text-align:center; margin-top:8px;
+    font-family:var(--serif-display); font-style:italic; font-weight:400;
+    font-size:clamp(1.25rem, 2.2vw, 1.8rem); color:var(--burgundy);
+    opacity:0; transform:translateY(10px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  [data-phase="5"] .hero-quote{opacity:1; transform:translateY(0);}
+
+  @media (max-width:900px){
+    .layer-intro{grid-template-columns:1fr; text-align:center;}
+    .intro-text .intro-para{max-width:100%; margin:0 auto;}
+    .intro-visual{align-items:center;}
+    .photo-frame, .photo-signature, .photo-caption, .margin-note{margin-left:0;}
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{position:relative; padding:140px 6vw; max-width:1180px; margin:0 auto;}
+  .eyebrow{
+    font-family:var(--sans); font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--burgundy); margin-bottom:18px;
+    opacity:0; transform:translateY(10px);
+    transition:opacity .35s var(--ease), transform .35s var(--ease);
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:''; display:inline-block; width:0; height:1px; background:var(--burgundy);
+    transition:width .45s var(--ease) .1s;
+  }
+  .reveal.in .eyebrow::before{width:36px;}
+  .section-title{
+    font-family:var(--serif-display); font-weight:500;
+    font-size:clamp(1.9rem, 4vw, 3.1rem); max-width:20ch; margin-bottom:8px;
+    opacity:0; transform:translateY(16px);
+    transition:opacity .4s var(--ease) .05s, transform .4s var(--ease) .05s;
+  }
+  .reveal.in .eyebrow{opacity:1; transform:translateY(0);}
+  .reveal.in .section-title{opacity:1; transform:translateY(0);}
+
+  /* ---------- STORY (about) ---------- */
+  .about-body{display:grid; grid-template-columns:0.9fr 1.4fr; gap:8vw; margin-top:54px;}
+  .about-side p{font-family:var(--sans); font-size:0.82rem; color:var(--ink-soft); line-height:1.9;}
+  .about-main p{font-size:1.14rem; line-height:1.95; color:var(--ink);}
+  .about-main p + p{margin-top:26px;}
+  .about-main strong{color:var(--burgundy); font-weight:600;}
+  .fade-up{
+    opacity:0; transform:translateY(22px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .reveal.in .fade-up{opacity:1; transform:translateY(0);}
+  .reveal.in .fade-up:nth-of-type(2){transition-delay:.04s;}
+  .reveal.in .fade-up:nth-of-type(3){transition-delay:.08s;}
+  .reveal.in .fade-up:nth-of-type(4){transition-delay:.11s;}
+  .reveal.in .fade-up:nth-of-type(5){transition-delay:.15s;}
+  .reveal.in .fade-up:nth-of-type(6){transition-delay:.18s;}
+
+  @media(max-width:900px){.about-body{grid-template-columns:1fr; gap:40px;}}
+
+  /* ---------- HOW I THINK ---------- */
+  .think-grid{
+    margin-top:60px; display:grid; grid-template-columns:repeat(5, 1fr); gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .think-card{
+    background:var(--ivory); padding:34px 22px; min-height:220px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    opacity:0;
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .think-card:nth-child(odd){transform:translateX(-24px);}
+  .think-card:nth-child(even){transform:translateX(24px);}
+  .reveal.in .think-card{opacity:1; transform:translateX(0);}
+  .reveal.in .think-card:nth-child(1){transition-delay:0s;}
+  .reveal.in .think-card:nth-child(2){transition-delay:.03s;}
+  .reveal.in .think-card:nth-child(3){transition-delay:.06s;}
+  .reveal.in .think-card:nth-child(4){transition-delay:.09s;}
+  .reveal.in .think-card:nth-child(5){transition-delay:.12s;}
+  .think-num{font-family:var(--mono); font-size:0.72rem; color:var(--sage);}
+  .think-card h4{
+    font-family:var(--serif-display); font-weight:500; font-size:1.18rem; margin:18px 0 10px;
+  }
+  .think-card p{font-family:var(--sans); font-size:0.82rem; color:var(--ink-soft); line-height:1.7;}
+
+  @media(max-width:1000px){.think-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.think-grid{grid-template-columns:1fr;}}
+
+  /* ---------- COMPASS ---------- */
+  .compass-wrap{
+    margin-top:110px; display:grid; grid-template-columns:1fr 1fr; gap:6vw; align-items:center;
+  }
+  .compass-copy .eyebrow-small{
+    font-family:var(--sans); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:14px;
+  }
+  .compass-copy h3{
+    font-family:var(--serif-display); font-weight:500; font-size:1.7rem; margin-bottom:16px; max-width:14ch;
+  }
+  .compass-copy p{font-size:0.98rem; color:var(--ink-soft); line-height:1.8; min-height:5.4em;}
+  #compassDesc{transition:opacity .3s var(--ease);}
+  .compass-svg{width:100%; max-width:420px; margin:0 auto; display:block;}
+  .compass-point{cursor:pointer;}
+  .compass-point circle{transition:r .3s var(--ease), fill .3s var(--ease);}
+  .compass-point.active circle{fill:var(--burgundy); r:7;}
+  .compass-point text{
+    font-family:var(--sans); font-size:11px; fill:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em;
+    transition:fill .3s var(--ease);
+  }
+  .compass-point.active text{fill:var(--burgundy);}
+  .compass-line{
+    stroke:var(--line-strong); stroke-width:1;
+    stroke-dasharray:200; stroke-dashoffset:200;
+    transition:stroke-dashoffset .6s var(--ease), stroke 0.3s var(--ease);
+  }
+  .reveal.in .compass-line{stroke-dashoffset:0;}
+  .compass-line.active{stroke:var(--burgundy);}
+
+  @media(max-width:900px){.compass-wrap{grid-template-columns:1fr; gap:40px;}}
+
+  /* ---------- WORK (projects as stories) ---------- */
+  .filter-tabs{
+    display:flex; gap:10px; flex-wrap:wrap; margin-top:44px;
+  }
+  .filter-tab{
+    font-family:var(--sans); font-size:0.78rem; font-weight:500;
+    padding:9px 18px; border:1px solid var(--line-strong); border-radius:20px;
+    color:var(--ink-soft); cursor:pointer;
+    transition:background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .filter-tab:hover{border-color:var(--burgundy); color:var(--burgundy);}
+  .filter-tab.active{background:var(--ink); color:var(--ivory); border-color:var(--ink);}
+
+  .story-project{
+    margin-top:110px; padding-top:70px; border-top:1px solid var(--line);
+  }
+  .story-project.filtered-out, .mw-row.filtered-out{display:none;}
+  .story-project:first-of-type{margin-top:60px;}
+  .story-head{
+    display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:16px;
+    margin-bottom:44px;
+    opacity:0; transform:translateY(18px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .reveal.in .story-head{opacity:1; transform:translateY(0);}
+  .story-head h3{font-family:var(--serif-display); font-weight:500; font-size:2rem;}
+  .story-head .story-tags{display:flex; gap:8px; flex-wrap:wrap;}
+  .story-head .story-tags span{
+    font-family:var(--mono); font-size:0.68rem; color:var(--ink-soft);
+    border:1px solid var(--line-strong); padding:4px 10px; border-radius:2px;
+  }
+  .story-head .story-tags a{
+    font-family:var(--sans); font-size:0.72rem; font-weight:600;
+    color:var(--burgundy); border:1px solid var(--burgundy); padding:4px 12px;
+    border-radius:2px; letter-spacing:0.02em;
+    transition:background .2s var(--ease), color .2s var(--ease);
+  }
+  .story-head .story-tags a:hover{background:var(--burgundy); color:var(--ivory);}
+  .story-steps{display:grid; grid-template-columns:repeat(3, 1fr); gap:38px 5vw;}
+  .story-brief{
+    margin-top:6px; max-width:74ch;
+    opacity:0; transform:translateY(18px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .reveal.in .story-brief{opacity:1; transform:translateY(0);}
+  .story-brief .sb-role{
+    display:block; font-family:var(--mono); font-size:0.7rem; letter-spacing:0.05em;
+    text-transform:uppercase; color:var(--burgundy); margin-bottom:14px;
+  }
+  .story-brief p{font-size:1.02rem; color:var(--ink); line-height:1.85;}
+
+  .story-media{
+    margin-top:36px; display:grid; grid-template-columns:1fr 1fr; gap:22px;
+  }
+  .story-media figure{margin:0;}
+  .story-media img{
+    width:100%; display:block; border-radius:3px;
+    border:1px solid var(--line); box-shadow:0 20px 44px -22px rgba(38,34,32,0.28);
+    filter:blur(8px); opacity:0;
+    transition:filter .6s var(--ease), opacity .6s var(--ease);
+  }
+  .reveal.in .story-media img{filter:blur(0); opacity:1;}
+  .reveal.in .story-media figure:nth-child(2) img{transition-delay:.1s;}
+  .story-media figcaption{
+    font-family:var(--mono); font-size:0.68rem; color:var(--ink-soft);
+    margin-top:10px; letter-spacing:0.02em;
+  }
+  @media(max-width:900px){.story-media{grid-template-columns:1fr;}}
+  .story-step{
+    opacity:0; transform:translateY(20px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .reveal.in .story-step{opacity:1; transform:translateY(0);}
+  .reveal.in .story-step:nth-child(1){transition-delay:0s;}
+  .reveal.in .story-step:nth-child(2){transition-delay:.03s;}
+  .reveal.in .story-step:nth-child(3){transition-delay:.06s;}
+  .reveal.in .story-step:nth-child(4){transition-delay:.09s;}
+  .reveal.in .story-step:nth-child(5){transition-delay:.12s;}
+  .reveal.in .story-step:nth-child(6){transition-delay:.15s;}
+  .story-step .step-label{
+    font-family:var(--mono); font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--burgundy); margin-bottom:10px; display:block;
+  }
+  .story-step p{font-size:0.96rem; color:var(--ink); line-height:1.75;}
+
+  .story-reflection{
+    margin-top:46px; padding:30px 34px; background:var(--sage-wash); border-left:2px solid var(--sage);
+    opacity:0; transform:translateY(18px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .reveal.in .story-reflection{opacity:1; transform:translateY(0); transition-delay:.18s;}
+  .story-reflection .rf-label{
+    font-family:var(--sans); font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:#5C6357; margin-bottom:10px;
+  }
+  .story-reflection p{
+    font-family:var(--serif-display); font-style:italic; font-size:1.08rem; line-height:1.7; color:var(--ink);
+  }
+
+  @media(max-width:900px){.story-steps{grid-template-columns:1fr;}}
+
+  /* more work (lighter cards) */
+  .more-work{margin-top:100px;}
+  .more-work-grid{margin-top:40px; display:flex; flex-direction:column;}
+  .mw-row{
+    display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:4vw; align-items:baseline;
+    padding:30px 0; border-top:1px solid var(--line);
+    opacity:0; transform:translateY(14px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .reveal.in .mw-row{opacity:1; transform:translateY(0);}
+  .reveal.in .mw-row:nth-child(2){transition-delay:.03s;}
+  .reveal.in .mw-row:nth-child(3){transition-delay:.06s;}
+  .reveal.in .mw-row:nth-child(4){transition-delay:.09s;}
+  .reveal.in .mw-row:nth-child(5){transition-delay:.12s;}
+  .more-work-grid .mw-row:last-child{border-bottom:1px solid var(--line);}
+  .mw-row h4{font-family:var(--serif-display); font-weight:500; font-size:1.15rem; margin-bottom:6px;}
+  .mw-row .mw-q{font-size:0.9rem; color:var(--ink-soft); line-height:1.6;}
+  .mw-row .mw-o{font-size:0.88rem; color:var(--ink); line-height:1.6;}
+  .mw-label{font-family:var(--mono); font-size:0.64rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); display:block; margin-bottom:6px;}
+
+  @media(max-width:900px){.mw-row{grid-template-columns:1fr; gap:8px;}}
+
+  /* ---------- THINKING (explorations) ---------- */
+  .explore-groups{margin-top:54px; display:grid; grid-template-columns:repeat(3, 1fr); gap:50px 5vw;}
+  .explore-group h4{
+    font-family:var(--serif-display); font-weight:500; font-size:1.15rem; margin-bottom:18px; color:var(--burgundy);
+  }
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    font-family:var(--mono); font-size:0.74rem; color:var(--ink-soft);
+    padding:6px 12px; border:1px solid var(--line-strong); border-radius:2px;
+  }
+  .explore-group{
+    opacity:0; transform:translateY(18px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .reveal.in .explore-group{opacity:1; transform:translateY(0);}
+  .reveal.in .explore-group:nth-child(1){transition-delay:0s;}
+  .reveal.in .explore-group:nth-child(2){transition-delay:.04s;}
+  .reveal.in .explore-group:nth-child(3){transition-delay:.08s;}
+
+  @media(max-width:900px){.explore-groups{grid-template-columns:1fr; gap:34px;}}
+
+  /* currently exploring / blender */
+  .exploring-now{
+    margin-top:90px; padding:48px; background:var(--ivory-deep); border:1px solid var(--line);
+    display:grid; grid-template-columns:1fr 1.6fr; gap:5vw; align-items:center;
+    opacity:0; transform:scale(0.98);
+    transition:opacity .45s var(--ease), transform .45s var(--ease);
+  }
+  .reveal.in .exploring-now{opacity:1; transform:scale(1);}
+  .exploring-now .en-label{
+    font-family:var(--sans); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--sage);
+    margin-bottom:10px;
+  }
+  .exploring-now h4{font-family:var(--serif-display); font-weight:500; font-size:1.6rem; margin-bottom:12px;}
+  .exploring-now p{font-size:0.98rem; color:var(--ink-soft); line-height:1.8;}
+  .en-next{
+    margin-top:18px; font-family:var(--mono); font-size:0.74rem; color:var(--ink-soft);
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .en-next span{border:1px dashed var(--line-strong); padding:4px 10px; border-radius:2px;}
+
+  @media(max-width:900px){.exploring-now{grid-template-columns:1fr;}}
+
+  /* ---------- JOURNEY (timeline) ---------- */
+  .timeline{margin-top:60px; position:relative;}
+  .timeline::before{
+    content:''; position:absolute; left:120px; top:6px; bottom:6px; width:1px; background:var(--line-strong);
+  }
+  .tl-item{
+    display:grid; grid-template-columns:110px 1fr; gap:5vw; padding-bottom:52px; position:relative;
+    opacity:0; transform:translateY(18px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .reveal.in .tl-item{opacity:1; transform:translateY(0);}
+  .reveal.in .tl-item:nth-child(1){transition-delay:0s;}
+  .reveal.in .tl-item:nth-child(2){transition-delay:.03s;}
+  .reveal.in .tl-item:nth-child(3){transition-delay:.06s;}
+  .reveal.in .tl-item:nth-child(4){transition-delay:.09s;}
+  .reveal.in .tl-item:nth-child(5){transition-delay:.12s;}
+  .reveal.in .tl-item:nth-child(6){transition-delay:.15s;}
+  .tl-date{font-family:var(--mono); font-size:0.76rem; color:var(--ink-soft); padding-top:2px;}
+  .tl-dot{
+    position:absolute; left:116px; top:6px; width:9px; height:9px; border-radius:50%; background:var(--burgundy);
+    transform:scale(0); transition:transform .5s var(--ease) .2s;
+  }
+  .reveal.in .tl-dot{transform:scale(1);}
+  .tl-content h4{font-family:var(--serif-display); font-weight:500; font-size:1.25rem; margin-bottom:8px;}
+  .tl-content p{font-size:0.96rem; color:var(--ink-soft); line-height:1.75; max-width:60ch;}
+
+  @media(max-width:900px){
+    .timeline::before{left:6px;}
+    .tl-item{grid-template-columns:1fr; gap:8px; padding-left:24px;}
+    .tl-dot{left:2px;}
+  }
+
+  /* ---------- LET'S TALK (contact) ---------- */
+  .contact-section{text-align:center; padding-bottom:200px;}
+  .contact-section .section-title{margin:0 auto 26px;}
+  .contact-lede{
+    font-size:1.1rem; color:var(--ink-soft); max-width:52ch; margin:0 auto 20px; line-height:1.85;
+    opacity:0; transform:translateY(14px);
+    transition:opacity .4s var(--ease) .1s, transform .4s var(--ease) .1s;
+  }
+  .reveal.in .contact-lede{opacity:1; transform:translateY(0);}
+  .contact-lede strong{color:var(--burgundy); font-weight:600;}
+  .contact-links{display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin:44px 0 60px;}
+  .contact-link{
+    font-family:var(--sans); font-size:0.85rem; font-weight:500;
+    padding:14px 26px; border:1px solid var(--ink);
+    transition:all .35s var(--ease);
+    opacity:0; transform:translateY(14px);
+  }
+  .reveal.in .contact-link{opacity:1; transform:translateY(0);}
+  .reveal.in .contact-link:nth-child(1){transition:opacity .35s var(--ease) .2s, transform .35s var(--ease) .2s;}
+  .reveal.in .contact-link:nth-child(2){transition:opacity .35s var(--ease) .3s, transform .35s var(--ease) .3s;}
+  .reveal.in .contact-link:nth-child(3){transition:opacity .35s var(--ease) .4s, transform .35s var(--ease) .4s;}
+  .contact-link.primary{background:var(--ink); color:var(--ivory);}
+  .contact-link:hover{background:var(--burgundy); color:var(--ivory); border-color:var(--burgundy);}
+
+  .sign-off{
+    font-family:var(--serif-display); font-style:italic; font-size:1.3rem; color:var(--burgundy);
+    opacity:0; transform:translateY(10px);
+    transition:opacity .4s var(--ease) .5s, transform .4s var(--ease) .5s;
+  }
+  .reveal.in .sign-off{opacity:1; transform:translateY(0);}
+
+  footer{
+    text-align:center; padding:34px 6vw 44px; font-family:var(--sans);
+    font-size:0.72rem; letter-spacing:0.04em; color:var(--ink-soft);
+    border-top:1px solid var(--line);
+  }
+  .note{font-family:var(--sans); font-size:0.68rem; color:var(--ink-soft); opacity:0.7; margin-top:14px;}
+</style>
+</head>
+<body>
+
+<svg class="grain" xmlns="http://www.w3.org/2000/svg">
+  <filter id="noiseFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+</svg>
+
+<nav class="nav" id="nav">
+  <div class="nav-name">Habiba Ehab</div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#story">Story</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#thinking">Thinking</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#contact">Let's Talk</a></li>
+    </ul>
+    <a class="nav-resume" href="#" download>Resume</a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<div class="hero-wrapper" id="heroWrapper">
+  <div class="hero-sticky" id="heroSticky" data-phase="0">
+    <div class="hero-bg-grid"></div>
+    <canvas id="network"></canvas>
+
+    <div class="hero-layer layer-heading">
+      <h1>Connecting ideas.<br>Building better solutions.</h1>
+      <p>Every project I've worked on started with a question — about systems, about people, about technology, about decisions. Following those questions has led me through optimization, software engineering, analytics, product thinking, and now 3D design.</p>
+      <a class="hero-cta" href="#work">Explore My Work →</a>
+    </div>
+
+    <div class="hero-layer layer-intro">
+      <div class="intro-text">
+        <div class="typed-line" id="typedLine"></div>
+        <p class="intro-para">I don't believe the best ideas live inside a single discipline. So I've spent the last few years exploring the spaces where optimization, software engineering, analytics, product thinking, and design intersect.</p>
+      </div>
+
+      <div class="intro-visual">
+        <div class="photo-frame">
+          <svg class="photo-blob" viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#7C2D3B" opacity="0.16" d="M60,40 C110,10 200,10 240,55 C280,100 285,170 260,220 C235,270 170,300 110,285 C50,270 15,210 15,150 C15,110 25,65 60,40 Z"/>
+          </svg>
+          <div class="photo-placeholder">HE</div>
+        </div>
+        <div class="photo-signature">Habiba</div>
+        <div class="photo-caption">Cairo, Egypt<br>Operations Research × Software × Data</div>
+
+        <div class="margin-note">
+          <div class="mn-label">Recognitions</div>
+          <ul>
+            <li>Top 5 Graduate</li>
+            <li>Top 5 Graduation Project</li>
+            <li>Team Lead</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hero-quote">"I don't collect skills. I collect perspectives."</div>
+    </div>
+
+    <div class="scroll-indicator"><span>↓</span><span>Explore</span></div>
+  </div>
+</div>
+
+<!-- ================= STORY ================= -->
+<section id="story" class="reveal">
+  <div class="eyebrow">What Keeps Me Curious?</div>
+  <h2 class="section-title">A way of thinking, more than a career path.</h2>
+
+  <div class="about-body">
+    <div class="about-side">
+      <p class="fade-up">Final year Decision Support Systems &amp; Operations Research student at Cairo University, ranked among the top 5 in the department. Graduating 2026.</p>
+    </div>
+    <div class="about-main">
+      <p class="fade-up">Curiosity has shaped every stage of my journey. Studying <strong>Operations Research</strong> taught me how to think systematically about complex decisions.</p>
+      <p class="fade-up">Building <strong>software</strong> taught me that even the best algorithms need thoughtful user experiences.</p>
+      <p class="fade-up">Working with <strong>data</strong> showed me how evidence can challenge assumptions.</p>
+      <p class="fade-up">Exploring <strong>product and project management</strong> helped me understand how ideas become reality through collaboration and execution.</p>
+      <p class="fade-up">Today, I'm learning <strong>Blender</strong> because I'm fascinated by how visual storytelling can make technology even more engaging.</p>
+      <p class="fade-up">Each new discipline doesn't replace the previous one — it expands the way I approach the next challenge.</p>
+    </div>
+  </div>
+
+  <!-- HOW I THINK -->
+  <div class="think-grid">
+    <div class="think-card">
+      <span class="think-num mono">01</span>
+      <div>
+        <h4>I ask questions.</h4>
+        <p>Every project begins with understanding the problem before choosing the solution.</p>
+      </div>
+    </div>
+    <div class="think-card">
+      <span class="think-num mono">02</span>
+      <div>
+        <h4>I connect ideas.</h4>
+        <p>The best answers often come from combining different disciplines.</p>
+      </div>
+    </div>
+    <div class="think-card">
+      <span class="think-num mono">03</span>
+      <div>
+        <h4>I build deliberately.</h4>
+        <p>Technology should simplify complexity, not add to it.</p>
+      </div>
+    </div>
+    <div class="think-card">
+      <span class="think-num mono">04</span>
+      <div>
+        <h4>I learn continuously.</h4>
+        <p>Every new subject expands how I approach the next challenge.</p>
+      </div>
+    </div>
+    <div class="think-card">
+      <span class="think-num mono">05</span>
+      <div>
+        <h4>I care about people.</h4>
+        <p>Whether it's an optimization model or a web application, someone has to use it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPASS -->
+  <div class="compass-wrap">
+    <div class="compass-copy">
+      <div class="eyebrow-small">The Compass</div>
+      <h3 id="compassTitle">Five directions. One way of thinking.</h3>
+      <p id="compassDesc">Click a point to see how each discipline shapes the way I approach a problem.</p>
+    </div>
+    <svg class="compass-svg" viewBox="0 0 400 400" id="compassSvg">
+      <!-- lines from center to points, drawn on reveal -->
+      <line class="compass-line" data-id="or" x1="200" y1="200" x2="200" y2="70"></line>
+      <line class="compass-line" data-id="dev" x1="200" y1="200" x2="323" y2="140"></line>
+      <line class="compass-line" data-id="data" x1="200" y1="200" x2="278" y2="300"></line>
+      <line class="compass-line" data-id="product" x1="200" y1="200" x2="122" y2="300"></line>
+      <line class="compass-line" data-id="design" x1="200" y1="200" x2="77" y2="140"></line>
+      <circle cx="200" cy="200" r="3" fill="#7C2D3B"></circle>
+
+      <g class="compass-point" data-id="or" transform="translate(200,70)">
+        <circle r="5" fill="#262220"></circle>
+        <text x="0" y="-16" text-anchor="middle">OR</text>
+      </g>
+      <g class="compass-point" data-id="dev" transform="translate(323,140)">
+        <circle r="5" fill="#262220"></circle>
+        <text x="18" y="4" text-anchor="start">Software</text>
+      </g>
+      <g class="compass-point" data-id="data" transform="translate(278,300)">
+        <circle r="5" fill="#262220"></circle>
+        <text x="16" y="18" text-anchor="start">Data</text>
+      </g>
+      <g class="compass-point" data-id="product" transform="translate(122,300)">
+        <circle r="5" fill="#262220"></circle>
+        <text x="-16" y="18" text-anchor="end">Product</text>
+      </g>
+      <g class="compass-point" data-id="design" transform="translate(77,140)">
+        <circle r="5" fill="#262220"></circle>
+        <text x="-18" y="4" text-anchor="end">Design</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ================= WORK ================= -->
+<section id="work" class="reveal">
+  <div class="eyebrow">Things I've Built</div>
+  <h2 class="section-title">Recruiters don't hire projects — they hire people who solve problems.</h2>
+
+  <div class="filter-tabs" id="filterTabs">
+    <div class="filter-tab active" data-filter="all">All</div>
+    <div class="filter-tab" data-filter="or">Operations Research</div>
+    <div class="filter-tab" data-filter="data">Data &amp; Analytics</div>
+    <div class="filter-tab" data-filter="dev">Development</div>
+  </div>
+
+  <!-- PROJECT 1: SCHEDIFY -->
+  <div class="story-project" data-category="or dev">
+    <div class="story-head">
+      <h3>Schedify</h3>
+      <div class="story-tags">
+        <span>MILP</span><span>GA</span><span>SA</span><span>Angular</span><span>2025–2026</span><a href="https://schedify-sable.vercel.app/" target="_blank" rel="noopener">Live Demo ↗</a>
+      </div>
+    </div>
+    <div class="story-steps">
+      <div class="story-step">
+        <span class="step-label">The Question</span>
+        <p>Basically: nobody wants to build a 1,470-person schedule by hand in Excel. So why were people still doing it?</p>
+      </div>
+      <div class="story-step">
+        <span class="step-label">The Challenge</span>
+        <p>Coverage rules, room capacity, people's preferences — all pulling in different directions. And it had to work for someone who's never seen an optimization model, not just for me.</p>
+      </div>
+      <div class="story-step">
+        <span class="step-label">The Process</span>
+        <p>Modeled it as a Mixed Integer Linear Program, then built a Genetic Algorithm and Simulated Annealing on top to see if they could keep up with an exact CBC solver.</p>
+      </div>
+      <div class="story-step">
+        <span class="step-label">The Solution</span>
+        <p>End result: a full web app — Flask on the backend, Angular on the front (that part was all me) — where you upload your data, hit run, and get a real schedule out.</p>
+      </div>
+      <div class="story-step">
+        <span class="step-label">The Outcome</span>
+        <p>Ranked one of the top 5 graduation projects in the department. I led the team of 5 that built it.</p>
+      </div>
+      <div class="story-step">
+        <span class="step-label">What I Learned</span>
+        <p>A perfect schedule is useless if nobody trusts it. Explaining the "why" mattered as much as getting the numbers right.</p>
+      </div>
+    </div>
+    <div class="story-media">
+      <figure>
+        <img src="images/schedify-1.png" alt="Schedify registration screen">
+        <figcaption>Workspace setup — choose manager or developer role</figcaption>
+      </figure>
+      <figure>
+        <img src="images/schedify-2.png" alt="Schedify optimizer results dashboard">
+        <figcaption>Optimizer output — full schedule, cost savings, Excel export</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- PROJECT 2: HOTEL BOOKING -->
+  <div class="story-project" data-category="data">
+    <div class="story-head">
+      <h3>Hotel Booking Demand &amp; Cancellation Modeling</h3>
+      <div class="story-tags">
+        <span>Python</span><span>XGBoost</span><span>Power BI</span><span>2025</span><a href="https://canva.link/wyi1hr3lj4xikej" target="_blank" rel="noopener">View Presentation ↗</a>
+      </div>
+    </div>
+    <div class="story-brief">
+      <span class="sb-role">Role — Data Cleaning &amp; Modeling, Team Project</span>
+      <p>Part of a team analyzing 50,000+ hotel booking records to predict which reservations would cancel. My part was the data cleaning and the modeling — building and comparing XGBoost, Logistic Regression, and Decision Trees (XGBoost came out on top at 83% accuracy). A teammate turned the results into the Power BI dashboards used for pricing and inventory decisions.</p>
+    </div>
+  </div>
+
+  <!-- PROJECT: ROAD ACCIDENT DASHBOARD -->
+  <div class="story-project" data-category="data">
+    <div class="story-head">
+      <h3>Road Accident Analytics Dashboard</h3>
+      <div class="story-tags">
+        <span>Tableau</span><span>Solo Project</span><span>2025</span>
+      </div>
+    </div>
+    <div class="story-brief">
+      <span class="sb-role">Role — Data Analyst, Solo Project</span>
+      <p>Broke down accident records by time, weather, road condition, and driver age group to flag risk patterns — motorcycles and trucks carried the highest casualty counts, and weather/road-condition combinations shifted accident type in ways a single variable wouldn't show.</p>
+    </div>
+    <div class="story-media">
+      <figure>
+        <img src="images/road-accidents.png" alt="Road Accident Analytics Dashboard">
+        <figcaption>Accidents by state, weather, driver age, and road condition</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- PROJECT: APPLE SALES DASHBOARD -->
+  <div class="story-project" data-category="data">
+    <div class="story-head">
+      <h3>Apple Global Sales Dashboard</h3>
+      <div class="story-tags">
+        <span>Power Query</span><span>Power Pivot</span><span>Power BI</span><span>2026</span>
+      </div>
+    </div>
+    <div class="story-brief">
+      <span class="sb-role">Role — Data Analyst, Solo Project</span>
+      <p>Cleaned and modeled a Kaggle dataset of Apple's global sales using Power Query and Power Pivot, then built a Power BI dashboard covering sales by quarter, category, and month across 19 countries and 75 stores.</p>
+    </div>
+    <div class="story-media">
+      <figure>
+        <img src="images/apple-sales.png" alt="Apple Global Sales Power BI dashboard">
+        <figcaption>Sales by quarter, category, and month — 19 countries, 75 stores</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- PROJECT: TOWN-TEAM SALES ANALYSIS -->
+  <div class="story-project" data-category="data">
+    <div class="story-head">
+      <h3>Town-Team Sales Analysis</h3>
+      <div class="story-tags">
+        <span>Excel</span><span>Solo Project</span><span>2025</span>
+      </div>
+    </div>
+    <div class="story-brief">
+      <span class="sb-role">Role — Data Analyst, Solo Project</span>
+      <p>Built a full sales analytics dashboard entirely in native Excel — no Power Query this time — tracking sales by item, category, order type, and month for a clothing retailer.</p>
+    </div>
+    <div class="story-media">
+      <figure>
+        <img src="images/town-team-sales.png" alt="Town-Team Sales Analysis Excel dashboard">
+        <figcaption>Sales by item, category, order type, and month</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- PROJECT 3: AI FITNESS APP -->
+  <div class="story-project" data-category="dev">
+    <div class="story-head">
+      <h3>AI Fitness App</h3>
+      <div class="story-tags">
+        <span>Angular</span><span>NGRX</span><span>Agile</span><span>2025</span><a href="https://fitness-app-five-chi.vercel.app/en/main/home" target="_blank" rel="noopener">Live Demo ↗</a>
+      </div>
+    </div>
+    <div class="story-brief">
+      <span class="sb-role">Role — Frontend Developer, Team Project</span>
+      <p>Built frontend features for a fitness app inside a fully Jira-tracked Agile sprint environment. Set up NGRX state management, token-based authentication, and reactive form validation to keep the app reliable as new features shipped every sprint.</p>
+    </div>
+    <div class="story-media">
+      <figure>
+        <img src="images/fitness-1.png" alt="AI Fitness App homepage">
+        <figcaption>Landing page</figcaption>
+      </figure>
+      <figure>
+        <img src="images/fitness-2.png" alt="AI Fitness App account settings page, built by Habiba">
+        <figcaption>Account &amp; settings page — built end to end</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- PROJECT 4: ROSE E-COMMERCE -->
+  <div class="story-project" data-category="dev">
+    <div class="story-head">
+      <h3>Rose — E-Commerce Platform</h3>
+      <div class="story-tags">
+        <span>Angular</span><span>Multilingual</span><span>Agile</span><span>2024–2025</span><a href="https://rose-chi-nine.vercel.app/#/dashboard/home" target="_blank" rel="noopener">Live Demo ↗</a>
+      </div>
+    </div>
+    <div class="story-brief">
+      <span class="sb-role">Role — Frontend Developer, Team Project</span>
+      <p>Contributed to a multilingual e-commerce platform across consecutive Agile/Scrum sprints tracked in Jira. Built and maintained CRUD functionality for both product and admin features, with form validation and async error handling that actually told you what went wrong instead of failing silently.</p>
+    </div>
+    <div class="story-media">
+      <figure>
+        <img src="images/rose-1.png" alt="Rose e-commerce homepage">
+        <figcaption>Homepage</figcaption>
+      </figure>
+      <figure>
+        <img src="images/rose-2.png" alt="Rose product detail page">
+        <figcaption>Product detail page</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- MORE WORK -->
+  <div class="more-work">
+    <div class="eyebrow" style="margin-bottom:0;">More Work</div>
+    <div class="more-work-grid">
+      <div class="mw-row" data-category="or">
+        <div>
+          <h4>Weekly Meal Planning Optimizer</h4>
+          <span class="mw-label">2024–2025</span>
+        </div>
+        <div>
+          <span class="mw-label">The Question</span>
+          <p class="mw-q">Can a week of 21 meals actually hit strict nutrition rules without feeling like a rigid diet plan?</p>
+        </div>
+        <div>
+          <span class="mw-label">The Outcome</span>
+          <p class="mw-o">Built a Genetic Algorithm with fuzzy logic, so nutrient targets could bend a little instead of breaking the whole plan.</p>
+        </div>
+      </div>
+      <div class="mw-row" data-category="or">
+        <div>
+          <h4>Two-Location Hospital Inventory Simulation</h4>
+          <span class="mw-label">2024</span>
+        </div>
+        <div>
+          <span class="mw-label">The Question</span>
+          <p class="mw-q">How much safety stock does a hospital actually need when demand and lead times keep moving?</p>
+        </div>
+        <div>
+          <span class="mw-label">The Outcome</span>
+          <p class="mw-o">A Monte Carlo simulation with a simple Tkinter interface, tracking shortages and reorder frequency across two sites.</p>
+        </div>
+      </div>
+      <div class="mw-row" data-category="dev">
+        <div>
+          <h4>POS &amp; CRM System</h4>
+          <span class="mw-label">In Progress · 2026</span>
+        </div>
+        <div>
+          <span class="mw-label">The Question</span>
+          <p class="mw-q">How do you make searching a product catalog feel instant for someone who isn't technical?</p>
+        </div>
+        <div>
+          <span class="mw-label">The Outcome</span>
+          <p class="mw-o">Built out search, filtering, and multi-criteria sorting, hooked up to live REST APIs.</p>
+        </div>
+      </div>
+      <div class="mw-row" data-category="data">
+        <div>
+          <h4>Student Performance Analysis</h4>
+          <span class="mw-label">2025 · <a href="https://canva.link/20714hpx68i527f" target="_blank" rel="noopener" style="color:var(--burgundy);">View Presentation ↗</a></span>
+        </div>
+        <div>
+          <span class="mw-label">The Question</span>
+          <p class="mw-q">What actually predicts a student's outcome once you clean up 60,000+ messy records?</p>
+        </div>
+        <div>
+          <span class="mw-label">The Outcome</span>
+          <p class="mw-o">Trained XGBoost and regression models to 87% accuracy, with a Power BI dashboard built for non-technical stakeholders.</p>
+        </div>
+      </div>
+      <div class="mw-row" data-category="data">
+        <div>
+          <h4>Ames Housing Price Prediction</h4>
+          <span class="mw-label">2025</span>
+        </div>
+        <div>
+          <span class="mw-label">The Question</span>
+          <p class="mw-q">Which features actually move a home's price, once you control for the noise?</p>
+        </div>
+        <div>
+          <span class="mw-label">The Outcome</span>
+          <p class="mw-o">An end-to-end regression pipeline on 2,900+ property records, hitting 89% accuracy, visualized in Tableau.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= THINKING ================= -->
+<section id="thinking" class="reveal">
+  <div class="eyebrow">Ideas I've Explored</div>
+  <h2 class="section-title">Not skills. Perspectives, borrowed from every discipline.</h2>
+
+  <div class="explore-groups">
+    <div class="explore-group">
+      <h4>Optimization &amp; Decision Support</h4>
+      <div class="chip-row">
+        <span class="chip">MILP</span>
+        <span class="chip">Genetic Algorithms</span>
+        <span class="chip">Simulated Annealing</span>
+        <span class="chip">Queuing Theory</span>
+        <span class="chip">Decision Theory</span>
+      </div>
+    </div>
+    <div class="explore-group">
+      <h4>Analytics &amp; Intelligence</h4>
+      <div class="chip-row">
+        <span class="chip">Python</span>
+        <span class="chip">XGBoost</span>
+        <span class="chip">Power BI</span>
+        <span class="chip">Tableau</span>
+        <span class="chip">SQL</span>
+      </div>
+    </div>
+    <div class="explore-group">
+      <h4>Product &amp; Interfaces</h4>
+      <div class="chip-row">
+        <span class="chip">Angular</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">NGRX</span>
+        <span class="chip">Figma</span>
+        <span class="chip">Blender</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exploring-now">
+    <div>
+      <div class="en-label">Currently Exploring</div>
+      <h4>Blender</h4>
+    </div>
+    <div>
+      <p>I'm fascinated by how visual storytelling can make technology feel more engaging — and I'm just genuinely curious about it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= JOURNEY ================= -->
+<section id="journey" class="reveal">
+  <div class="eyebrow">Milestones Along the Way</div>
+  <h2 class="section-title">A chronology, because order carries meaning here.</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-date">2022–2026</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>B.Sc. Decision Support Systems &amp; Operations Research</h4>
+        <p>Cairo University. Ranked among the top 5 students in the department; graduation project selected as one of the top 5 in the department.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Jul–Aug 2025</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>NTI Advanced Data Analytics</h4>
+        <p>Intensive full-time training — 6 days a week, 6 hours a day, over one month — in Python, Power BI, and Tableau.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Aug 2025</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>Sprints × Microsoft Summer Camp</h4>
+        <p>Project &amp; Product Management track — the full project lifecycle, Agile, and Scrum frameworks.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2025</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>Elevate Tech Bootcamp — Frontend Advanced Track</h4>
+        <p>Angular development, clean architecture, micro frontends, advanced state management, and unit testing.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2025–2026</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>Schedify — Team Lead</h4>
+        <p>Led a team of 5 through model design, algorithm development, and delivery of the graduation project.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">June 2026</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>McKinsey Forward Program</h4>
+        <p>10-week global program covering structured problem solving, communication frameworks, and adaptability skill building.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LET'S TALK ================= -->
+<section id="contact" class="reveal contact-section">
+  <div class="eyebrow" style="justify-content:center; display:flex;">What's Next?</div>
+  <h2 class="section-title">Let's follow the next question together.</h2>
+  <p class="contact-lede">I'm still exploring. Currently learning <strong>Blender</strong>. Always curious about meaningful problems. Let's build something together.</p>
+
+  <div class="contact-links">
+    <a class="contact-link primary" href="mailto:[email protected]">Email Me</a>
+    <a class="contact-link" href="#" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="contact-link" href="#" target="_blank" rel="noopener">GitHub</a>
+  </div>
+
+  <div class="sign-off">"I don't collect skills. I collect perspectives."</div>
+  <p class="note">Placeholder email &amp; social links — replace with your real ones before publishing.</p>
+</section>
+
+<footer>© 2026 Habiba Ehab — Curiosity in Action</footer>
+
+<script>
+// ---------- NAV SCROLL STATE ----------
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, {passive:true});
+
+// ---------- SMOOTH NAV LINKS ----------
+document.querySelectorAll('.nav-links a, .hero-cta').forEach(link => {
+  link.addEventListener('click', e => {
+    const href = link.getAttribute('href');
+    if(href && href.startsWith('#')){
+      const target = document.querySelector(href);
+      if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
+    }
+  });
+});
+
+// ---------- HERO SCROLL-LINKED STORYTELLING ----------
+const heroWrapper = document.getElementById('heroWrapper');
+const heroSticky = document.getElementById('heroSticky');
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function updateHeroPhase(){
+  const rect = heroWrapper.getBoundingClientRect();
+  const total = heroWrapper.offsetHeight - window.innerHeight;
+  const scrolled = -rect.top;
+  const progress = Math.min(Math.max(scrolled / total, 0), 1);
+
+  let phase = 0;
+  if(progress > 0.86) phase = 5;
+  else if(progress > 0.66) phase = 4;
+  else if(progress > 0.46) phase = 3;
+  else if(progress > 0.24) phase = 2;
+  else if(progress > 0.08) phase = 1;
+
+  if(heroSticky.getAttribute('data-phase') != phase){
+    heroSticky.setAttribute('data-phase', phase);
+    if(phase >= 2 && !typedDone) typeLine();
+  }
+}
+window.addEventListener('scroll', updateHeroPhase, {passive:true});
+updateHeroPhase();
+
+// ---------- TYPED LINE (letter fade) ----------
+const typedLineEl = document.getElementById('typedLine');
+const typedText = "Hi, I'm Habiba.";
+typedLineEl.innerHTML = typedText.split('').map(ch => `<span>${ch === ' ' ? '&nbsp;' : ch}</span>`).join('');
+let typedDone = false;
+function typeLine(){
+  if(typedDone) return;
+  typedDone = true;
+  const spans = typedLineEl.querySelectorAll('span');
+  spans.forEach((s, i) => setTimeout(() => s.classList.add('show'), reduced ? 0 : i * 16));
+}
+
+// ---------- SECTION REVEALS ----------
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('in'); });
+}, {threshold:0.12});
+revealEls.forEach(el => io.observe(el));
+
+// ---------- PROJECT FILTER TABS ----------
+const filterTabs = document.querySelectorAll('.filter-tab');
+const filterable = document.querySelectorAll('[data-category]');
+filterTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    filterTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const f = tab.dataset.filter;
+    filterable.forEach(el => {
+      const cats = el.dataset.category.split(' ');
+      const show = f === 'all' || cats.includes(f);
+      el.classList.toggle('filtered-out', !show);
+    });
+  });
+});
+
+// ---------- COMPASS INTERACTION ----------
+const compassData = {
+  or: {title:"Operations Research", desc:"Taught me to think systematically about complex decisions — breaking a messy problem into constraints, objectives, and tradeoffs."},
+  dev: {title:"Software", desc:"Taught me that even the best algorithm needs a thoughtful interface — a model no one can use is a model that doesn't matter."},
+  data: {title:"Data", desc:"Showed me how evidence can challenge assumptions — and how a chart can change a decision faster than an argument can."},
+  product: {title:"Product", desc:"Helped me understand how ideas become reality through collaboration, prioritization, and execution."},
+  design: {title:"Design", desc:"My newest direction — learning how visual storytelling makes technology easier to feel, not just to use."}
+};
+const compassPoints = document.querySelectorAll('.compass-point');
+const compassLines = document.querySelectorAll('.compass-line');
+const compassTitle = document.getElementById('compassTitle');
+const compassDesc = document.getElementById('compassDesc');
+
+function setCompass(id){
+  compassPoints.forEach(p => p.classList.toggle('active', p.dataset.id === id));
+  compassLines.forEach(l => l.classList.toggle('active', l.dataset.id === id));
+  const d = compassData[id];
+  compassDesc.style.opacity = 0;
+  setTimeout(() => {
+    compassTitle.textContent = d.title;
+    compassDesc.textContent = d.desc;
+    compassDesc.style.opacity = 1;
+  }, 150);
+}
+compassPoints.forEach(p => p.addEventListener('click', () => setCompass(p.dataset.id)));
+compassPoints.forEach(p => p.addEventListener('mouseenter', () => setCompass(p.dataset.id)));
+
+// ---------- NEURON-STYLE NETWORK CANVAS ----------
+const canvas = document.getElementById('network');
+const ctx = canvas.getContext('2d');
+let W, H, dots = [];
+const DOT_COUNT = 32;
+const LINK_DIST = 150;
+let t = 0;
+
+function resize(){
+  W = canvas.width = heroSticky.offsetWidth;
+  H = canvas.height = heroSticky.offsetHeight;
+}
+function initDots(){
+  dots = Array.from({length: DOT_COUNT}, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    baseX: 0, baseY: 0,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.15 + Math.random() * 0.15,
+    amp: 10 + Math.random() * 14,
+    r: Math.random() * 1.2 + 0.7
+  }));
+  dots.forEach(d => { d.baseX = d.x; d.baseY = d.y; });
+}
+resize(); initDots();
+window.addEventListener('resize', () => { resize(); initDots(); });
+
+function drawNetwork(){
+  ctx.clearRect(0,0,W,H);
+  t += 0.006;
+
+  // gentle organic drift, like neurons breathing rather than bouncing particles
+  dots.forEach(d => {
+    d.x = d.baseX + Math.sin(t * d.speed + d.phase) * d.amp;
+    d.y = d.baseY + Math.cos(t * d.speed * 0.8 + d.phase) * d.amp;
+  });
+
+  for(let i=0;i<dots.length;i++){
+    for(let j=i+1;j<dots.length;j++){
+      const dx = dots[i].x - dots[j].x;
+      const dy = dots[i].y - dots[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < LINK_DIST){
+        const pulse = 0.5 + 0.5 * Math.sin(t * 0.6 + i + j);
+        const alpha = (1 - dist/LINK_DIST) * 0.15 * (0.6 + 0.4 * pulse);
+        ctx.strokeStyle = `rgba(124,45,59,${alpha})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(dots[i].x, dots[i].y);
+        ctx.lineTo(dots[j].x, dots[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  dots.forEach(d => {
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(38,34,32,0.26)';
+    ctx.fill();
+  });
+
+  if(!reduced) requestAnimationFrame(drawNetwork);
+}
+drawNetwork();
+</script>
+
+</body>
+</html>
